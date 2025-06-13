@@ -40,6 +40,10 @@ client.on('interactionCreate', async (interaction) => {
     console.error('Interaction error:', error);
   }
 });
-
+client.on('messageCreate', (message) => {
+  if (message.content === '!ping') {
+    message.reply('Pong!');
+  }
+});
 client.on('error', console.error);
 client.login(process.env.DISCORD_TOKEN);
