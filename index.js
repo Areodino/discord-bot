@@ -18,9 +18,9 @@ client.once('ready', async () => {
 
   try {
     await rest.put(
-  Routes.applicationGuildCommands(client.user.id, '1138455092425674922'),
-  { body: commands }
-)
+      Routes.applicationGuildCommands(client.user.id, '1138455092425674922'),
+      { body: commands }
+    )
     console.log('✅ Slash commands registered')
   } catch (err) {
     console.error(err)
@@ -30,14 +30,7 @@ client.once('ready', async () => {
 client.on('interactionCreate', async interaction => {
   if (!interaction.isChatInputCommand()) return
 
-  if (interaction.commandName === 'hello') {
-    await interaction.reply('Hello!')
-  }
-})
-client.on('interactionCreate', async interaction => {
-  if (!interaction.isChatInputCommand()) return
-
-  console.log('Received command:', interaction.commandName) // 👈 Add this
+  console.log('Received command:', interaction.commandName)
 
   if (interaction.commandName === 'hello') {
     await interaction.reply('Hello!')
@@ -45,4 +38,3 @@ client.on('interactionCreate', async interaction => {
 })
 
 client.login(process.env.DISCORD_TOKEN)
-
