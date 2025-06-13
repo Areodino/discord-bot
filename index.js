@@ -18,9 +18,9 @@ client.once('ready', async () => {
 
   try {
     await rest.put(
-      Routes.applicationCommands(client.user.id),
-      { body: commands }
-    )
+  Routes.applicationGuildCommands(client.user.id, '1138455092425674922'),
+  { body: commands }
+)
     console.log('✅ Slash commands registered')
   } catch (err) {
     console.error(err)
