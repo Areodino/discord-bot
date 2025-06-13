@@ -34,6 +34,15 @@ client.on('interactionCreate', async interaction => {
     await interaction.reply('Hello!')
   }
 })
+client.on('interactionCreate', async interaction => {
+  if (!interaction.isChatInputCommand()) return
+
+  console.log('Received command:', interaction.commandName) // 👈 Add this
+
+  if (interaction.commandName === 'hello') {
+    await interaction.reply('Hello!')
+  }
+})
 
 client.login(process.env.DISCORD_TOKEN)
 
