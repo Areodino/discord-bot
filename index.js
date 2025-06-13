@@ -1,40 +1,45 @@
-require('dotenv').config()
-const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder } = require('discord.js')
+require('dotenv').config();
+const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder } = require('discord.js');
 
 const client = new Client({
-  intents: [GatewayIntentBits.Guilds]
-})
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages]
+});
 
 const commands = [
   new SlashCommandBuilder()
     .setName('hello')
     .setDescription('Replies with Hello!')
-].map(command => command.toJSON())
+].map(command => command.toJSON());
 
-const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN)
+const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 
 client.once('ready', async () => {
-  console.log(`Logged in as ${client.user.tag}`)
+  console.log(`Logged in as ${client.user.tag}`);
 
   try {
+    // Register commands globally (for all guilds)
     await rest.put(
-      Routes.applicationGuildCommands(client.user.id, '1138455092425674922'),
+      Routes.applicationCommands(client.user.id),
       { body: commands }
-    )
-    console.log('✅ Slash commands registered')
+    );
+    console.log('✅ Slash commands registered');
   } catch (err) {
-    console.error(err)
+    console.error('❌ Command registration failed:', err);
   }
-})
+});
+client.on('interactionCreate', async (interaction) => {
+  try {
+    if (!interaction.isChatInputCommand()) return;
 
-client.on('interactionCreate', async interaction => {
-  if (!interaction.isChatInputCommand()) return
+    console.log(`Received command: ${interaction.commandName}`);
 
-  console.log('Received command:', interaction.commandName)
-
-  if (interaction.commandName === 'hello') {
-    await interaction.reply('Hello!')
+    if (interaction.commandName === 'hello') {
+      await interaction.reply('Hello!');
+    }
+  } catch (error) {
+    console.error('Interaction error:', error);
   }
-})
+});
 
-client.login(process.env.DISCORD_TOKEN)
+client.on('error', console.error);
+client.login(process.env.DISCORD_TOKEN);
